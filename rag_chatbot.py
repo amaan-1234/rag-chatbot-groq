@@ -3,13 +3,13 @@ from langchain_groq import ChatGroq
 from langchain.prompts import ChatPromptTemplate
 from langchain.schema import HumanMessage, SystemMessage
 from document_processor import DocumentProcessor
-from vector_store import VectorStore
+from vector_store_deploy import VectorStore
 from config import Config
 
 class RAGChatbot:
     """RAG-based chatbot that combines retrieval and generation."""
     
-    def __init__(self):
+    def __init__(self, vector_store: VectorStore, document_processor: DocumentProcessor):
         self.llm = ChatGroq(
             model_name=Config.LLM_MODEL,
             temperature=Config.TEMPERATURE,
@@ -17,8 +17,8 @@ class RAGChatbot:
             groq_api_key=Config.GROQ_API_KEY
         )
         
-        self.document_processor = DocumentProcessor()
-        self.vector_store = VectorStore()
+        self.document_processor = document_processor
+        self.vector_store = vector_store
         
         # Define the system prompt for RAG
         self.system_prompt = """You are a helpful AI assistant that answers questions based on the provided context. 
@@ -36,20 +36,18 @@ class RAGChatbot:
     def add_document(self, file_path: str) -> Dict[str, Any]:
         """Add a document to the knowledge base."""
         try:
-            # Process the document
-            processed_data = self.document_processor.process_document(file_path)
+            # Load and chunk the document
+            documents = self.document_processor.load_document(file_path)
+            chunks = self.document_processor.chunk_documents(documents)
+            
+            # Add source information to metadata
+            for chunk in chunks:
+                chunk.metadata['source'] = file_path
             
             # Add to vector store
-            self.vector_store.add_documents(
-                texts=processed_data['texts'],
-                metadata=processed_data['metadata']
-            )
+            result = self.vector_store.add_documents(chunks)
             
-            return {
-                'success': True,
-                'message': f'Successfully added document: {file_path}',
-                'chunks_created': len(processed_data['texts'])
-            }
+            return result
         
         except Exception as e:
             return {
@@ -66,8 +64,8 @@ class RAGChatbot:
         
         # Combine relevant contexts
         context_parts = []
-        for result in results:
-            context_parts.append(result['text'])
+        for doc in results:
+            context_parts.append(doc.page_content)
         
         return "\n\n".join(context_parts)
     
@@ -116,18 +114,8 @@ class RAGChatbot:
     
     def get_knowledge_base_stats(self) -> Dict[str, Any]:
         """Get statistics about the knowledge base."""
-        return self.vector_store.get_collection_stats()
+        return self.vector_store.get_stats()
     
     def clear_knowledge_base(self) -> Dict[str, Any]:
         """Clear all documents from the knowledge base."""
-        try:
-            self.vector_store.clear_collection()
-            return {
-                'success': True,
-                'message': 'Knowledge base cleared successfully'
-            }
-        except Exception as e:
-            return {
-                'success': False,
-                'message': f'Error clearing knowledge base: {str(e)}'
-            }
+        return self.vector_store.clear_all()
