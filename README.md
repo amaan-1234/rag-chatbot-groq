@@ -31,10 +31,6 @@ A powerful Retrieval-Augmented Generation (RAG) chatbot built with Streamlit, Fa
 ### Local Development
 
 1. **Clone the repository**
-   ```bash
-   git clone <your-repo-url>
-   cd rag-chatbot
-   ```
 
 2. **Install dependencies**
    ```bash
@@ -147,10 +143,6 @@ rag-chatbot/
 3. Make your changes
 4. Add tests if applicable
 5. Submit a pull request
-
-## 📄 License
-
-This project is licensed under the MIT License.
 
 ## 🙏 Acknowledgments
 
