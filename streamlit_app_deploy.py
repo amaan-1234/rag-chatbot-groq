@@ -8,7 +8,7 @@ import shutil
 # Import our backend modules
 from config import Config
 from document_processor import DocumentProcessor
-from vector_store import VectorStore
+from vector_store_deploy import VectorStore
 from rag_chatbot import RAGChatbot
 
 # Page configuration
