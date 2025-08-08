@@ -2,6 +2,8 @@
 
 A powerful Retrieval-Augmented Generation (RAG) chatbot built with Streamlit, FastAPI, and Groq AI. This application allows users to upload documents and chat with an AI that can answer questions based on the uploaded content.
 
+## Live Demo: https://amaan-rag-chatbot.streamlit.app/
+
 ## ✨ Features
 
 - **Document Upload**: Support for PDF, TXT, and MD files
