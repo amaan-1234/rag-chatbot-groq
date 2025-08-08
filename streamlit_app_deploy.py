@@ -6,11 +6,32 @@ from typing import Dict, Any
 import shutil
 
 # Check for required environment variables
-if not os.getenv("GROQ_API_KEY"):
+api_key = os.getenv("GROQ_API_KEY")
+if not api_key:
     st.error("❌ GROQ_API_KEY environment variable is not set!")
     st.info("Please add your Groq API key to the Streamlit Cloud secrets:")
-    st.code("GROQ_API_KEY = 'your_groq_api_key_here'")
+    st.code("GROQ_API_KEY = 'your_actual_groq_api_key_here'")
+    st.info("Steps to fix:")
+    st.markdown("""
+    1. Go to your deployed app on Streamlit Cloud
+    2. Click the ⚙️ (Settings) icon
+    3. Click on "Secrets"
+    4. Add your Groq API key:
+    ```toml
+    GROQ_API_KEY = "your_actual_groq_api_key_here"
+    ```
+    5. Click "Save"
+    6. Your app will automatically redeploy
+    """)
     st.stop()
+
+if api_key == "your_groq_api_key_here" or api_key == "your_actual_groq_api_key_here":
+    st.error("❌ GROQ_API_KEY is still set to placeholder value!")
+    st.info("Please replace the placeholder with your actual Groq API key in Streamlit Cloud secrets.")
+    st.stop()
+
+# Show success message for API key configuration
+st.success("✅ GROQ_API_KEY is properly configured!")
 
 # Import our backend modules
 from config import Config
