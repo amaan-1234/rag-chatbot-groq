@@ -30,8 +30,10 @@ app.add_middleware(
 try:
     Config.validate()
     chatbot = RAGChatbot()
+    print("✅ RAG Chatbot initialized successfully")
 except Exception as e:
-    print(f"Error initializing chatbot: {e}")
+    print(f"❌ Error initializing chatbot: {e}")
+    print("Please check your .env file and ensure GROQ_API_KEY is set correctly")
     chatbot = None
 
 # Pydantic models

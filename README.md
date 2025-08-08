@@ -20,7 +20,7 @@ A powerful Retrieval-Augmented Generation (RAG) chatbot built with Streamlit, Fa
 - **Vector Database**: ChromaDB
 - **Document Processing**: LangChain
 
-## 🚀 Quick Start
+## 🔧 Quick Start
 
 ### Prerequisites
 
@@ -39,6 +39,10 @@ A powerful Retrieval-Augmented Generation (RAG) chatbot built with Streamlit, Fa
 
 3. **Set up environment variables**
    ```bash
+   # Run the setup script
+   python setup.py
+   
+   # Or manually create .env file
    cp env_example.txt .env
    # Edit .env and add your GROQ_API_KEY
    ```
@@ -52,6 +56,54 @@ A powerful Retrieval-Augmented Generation (RAG) chatbot built with Streamlit, Fa
    - Web Interface: http://localhost:8501
    - API Docs: http://localhost:8000/docs
 
+## 🛠️ Troubleshooting
+
+### Common Issues
+
+1. **"GROQ_API_KEY is required" error**
+   - Make sure you have a `.env` file in the project root
+   - Add your Groq API key: `GROQ_API_KEY=your_actual_api_key`
+   - Get your API key from: https://console.groq.com/
+
+2. **Import errors**
+   - Run: `pip install -r requirements.txt`
+   - Make sure you're using Python 3.8+
+
+3. **"Module not found" errors**
+   - Check that all files are in the correct directory
+   - Run the setup script: `python setup.py`
+
+4. **API connection issues**
+   - Check if the FastAPI server is running on port 8000
+   - Verify your internet connection
+   - Check your Groq API key is valid
+
+5. **Document upload failures**
+   - Ensure file is under 10MB
+   - Check file format (PDF, TXT, MD only)
+   - Try with smaller files first
+
+### Debug Steps
+
+1. **Check environment**
+   ```bash
+   python setup.py
+   ```
+
+2. **Test API directly**
+   ```bash
+   python api.py
+   ```
+
+3. **Test Streamlit directly**
+   ```bash
+   streamlit run streamlit_app.py
+   ```
+
+4. **Check logs**
+   - Look for error messages in the terminal
+   - Check the browser console for frontend errors
+
 ## 🌐 Deployment
 
 ### Streamlit Community Cloud
@@ -59,24 +111,44 @@ A powerful Retrieval-Augmented Generation (RAG) chatbot built with Streamlit, Fa
 1. **Push to GitHub**
    ```bash
    git add .
-   git commit -m "Initial commit"
+   git commit -m "Update deployment configuration"
    git push origin main
    ```
 
 2. **Deploy on Streamlit Cloud**
    - Go to [share.streamlit.io](https://share.streamlit.io)
    - Connect your GitHub account
-   - Select this repository
-   - Set the main file path to `streamlit_app.py`
-   - Add your `GROQ_API_KEY` in the secrets section
-   - Deploy!
+   - Select your repository: `rag-chatbot-groq`
+   - Set the main file path to: `streamlit_app_deploy.py`
+   - Click "Deploy!"
+
+3. **Configure Environment Variables**
+   - In your deployed app, go to "Settings" (⚙️ icon)
+   - Click "Secrets"
+   - Add your Groq API key:
+   ```toml
+   GROQ_API_KEY = "your_actual_groq_api_key_here"
+   ```
+
+4. **Optional: Add other environment variables**
+   ```toml
+   GROQ_API_KEY = "your_actual_groq_api_key_here"
+   EMBEDDING_MODEL = "text-embedding-3-small"
+   LLM_MODEL = "llama3-8b-8192"
+   CHUNK_SIZE = "500"
+   CHUNK_OVERLAP = "50"
+   ```
+
+5. **Save and Redeploy**
+   - Click "Save"
+   - Your app will automatically redeploy
 
 ### Environment Variables for Deployment
 
 Add these to your Streamlit Cloud secrets:
 
 ```toml
-GROQ_API_KEY = "your_groq_api_key_here"
+GROQ_API_KEY = "your_actual_groq_api_key_here"
 EMBEDDING_MODEL = "text-embedding-3-small"
 LLM_MODEL = "llama3-8b-8192"
 CHUNK_SIZE = "500"

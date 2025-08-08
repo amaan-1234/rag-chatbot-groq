@@ -3,7 +3,7 @@ import pickle
 import tempfile
 from typing import List, Dict, Any, Optional
 from langchain_community.vectorstores import FAISS
-from langchain_community.embeddings import HuggingFaceEmbeddings
+from langchain_huggingface import HuggingFaceEmbeddings
 from langchain.schema import Document
 from config import Config
 

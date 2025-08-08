@@ -5,6 +5,13 @@ import time
 from typing import Dict, Any
 import shutil
 
+# Check for required environment variables
+if not os.getenv("GROQ_API_KEY"):
+    st.error("❌ GROQ_API_KEY environment variable is not set!")
+    st.info("Please add your Groq API key to the Streamlit Cloud secrets:")
+    st.code("GROQ_API_KEY = 'your_groq_api_key_here'")
+    st.stop()
+
 # Import our backend modules
 from config import Config
 from document_processor import DocumentProcessor
@@ -76,6 +83,9 @@ st.markdown("""
 def initialize_components():
     """Initialize RAG components with caching."""
     try:
+        # Validate configuration first
+        Config.validate()
+        
         # Initialize components
         vector_store = VectorStore()
         document_processor = DocumentProcessor()
@@ -97,6 +107,7 @@ chatbot, vector_store = initialize_components()
 
 if chatbot is None:
     st.error("❌ Failed to initialize the chatbot. Please check your configuration.")
+    st.info("Make sure you have set the GROQ_API_KEY in your Streamlit Cloud secrets.")
     st.stop()
 
 # Main header

@@ -9,7 +9,10 @@ from config import Config
 class RAGChatbot:
     """RAG-based chatbot that combines retrieval and generation."""
     
-    def __init__(self, vector_store: VectorStore, document_processor: DocumentProcessor):
+    def __init__(self, vector_store: VectorStore = None, document_processor: DocumentProcessor = None):
+        # Validate configuration first
+        Config.validate()
+        
         self.llm = ChatGroq(
             model_name=Config.LLM_MODEL,
             temperature=Config.TEMPERATURE,
@@ -17,8 +20,9 @@ class RAGChatbot:
             groq_api_key=Config.GROQ_API_KEY
         )
         
-        self.document_processor = document_processor
-        self.vector_store = vector_store
+        # Initialize components if not provided
+        self.document_processor = document_processor or DocumentProcessor()
+        self.vector_store = vector_store or VectorStore()
         
         # Define the system prompt for RAG
         self.system_prompt = """You are a helpful AI assistant that answers questions based on the provided context. 
